@@ -1,0 +1,22 @@
+import subprocess
+
+def add_message():
+    message = "Hello world"
+    with open("/etc/motd", "a") as motd:
+        motd.write(f"\n{message}\n")
+
+def remove_message():
+    message = "Hello world"
+    subprocess.run(["sed", "-i", f"/{message}/d", "/etc/motd"])
+
+def check_session():
+    # Sprawdź aktywne sesje
+    result = subprocess.run(["who"], capture_output=True, text=True)
+    active_sessions = result.stdout.strip()
+    return bool(active_sessions)
+
+if __name__ == "__main__":
+    if check_session():
+        add_message()
+    else:
+        remove_message()
